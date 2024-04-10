@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <title>Abarrotes el Inge</title>
+</head>
+<body>
+  <nav>
+    <div class="logo">
+      <span>Tienda</span>
+    </div>
+    <div class="action">
+      <ul>
+        {% block action %} {% endblock %}
+      </ul>
+    </div>
+  </nav>
+   {% block content %} {% endblock %}
+</body>
+</html>

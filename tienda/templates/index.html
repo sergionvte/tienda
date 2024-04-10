@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block action %}
+<li><a href="{% url 'admin:index' %}">Registro</a></li>
+<li><a href="{% url 'ventas' %}">Ventas</a></li>
+{% endblock %}
+
+
+{% block content %}
+<ul>
+{% for producto in productos %}
+    <li>
+        <strong>{{ producto.nombre }}</strong>
+        <br>
+        Código de Barras: {{ producto.codigo_barras }}
+        <br>
+        Descripción: {{ producto.descripcion }}
+        <br>
+        Precio: ${{ producto.precio }}
+        <br>
+        Cantidad Disponible: {{ producto.cantidad_disponible }}
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}

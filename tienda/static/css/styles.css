@@ -1,0 +1,15 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action > ul {
+  list-style: none;
+}
+
+.action > ul > li {
+  float: left;
+  margin-left: 5px;
+}
+
