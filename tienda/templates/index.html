@@ -8,6 +8,8 @@
 
 {% block content %}
 <ul>
+{% if productos is not None %}
+<h3>Inventario</h3>
 {% for producto in productos %}
     <li>
         <strong>{{ producto.nombre }}</strong>
@@ -21,5 +23,6 @@
         Cantidad Disponible: {{ producto.cantidad_disponible }}
     </li>
 {% endfor %}
+{% endif %}
 </ul>
 {% endblock %}

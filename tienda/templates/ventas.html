@@ -8,27 +8,38 @@
 
 <h1>Lista de Compras</h1>
 
-    <!-- Formulario para agregar productos -->
-    <form id="agregarProductoForm">
-        {% csrf_token %}
-        <label for="codigo_barras">Código de Barras:</label>
-        <input type="text" id="codigo_barras" name="codigo_barras">
-        <button type="button" onclick="agregarProducto()">Agregar Producto</button>
-    </form>
+<!-- Formulario para agregar productos -->
+<form id="agregarProductoForm" method="post">
+    {% csrf_token %}
+    <label for="codigo_barras">Código de Barras:</label>
+    <input type="text" id="codigo_barras" name="codigo_barras">
+    <button type="submit">Agregar Producto</button>
+</form>
 
-    <hr>
+<hr>
 
-    <!-- Lista de compras actual -->
-    <h2>Productos en la Lista de Compras:</h2>
-    <ul id="listaCompras">
-        {% for producto in lista_compras %}
-            <li>{{ producto.nombre }} - Precio: ${{ producto.precio }}</li>
-        {% empty %}
-            <li>No hay productos en la lista de compras.</li>
-        {% endfor %}
-    </ul>
+<!-- Lista de compras actual -->
+<h2>Productos en la Lista de Compras:</h2>
+<ul id="listaCompras">
+    {% for producto, cantidad in conteo_productos.items %}
+        <li>
+            {{ producto.nombre }} -
+            Cantidad: {{ cantidad }} -
+            Precio Individual: ${{ producto.precio }} -
+            <form action="{% url 'eliminar_producto' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="codigo_barras" value="{{ producto.codigo_barras }}">
+                <button type="submit">Eliminar Unidad</button>
+            </form>
+        </li>
+    {% empty %}
+        <li>No hay productos en la lista de compras.</li>
+    {% endfor %}
+</ul>
 
-    <!-- Mostrar el total de productos en la lista -->
-    <p>Total de Productos en la Lista de Compras: <span id="totalProductos">0</span></p>
+
+<!-- Mostrar el total de productos en la lista -->
+<p>Total de Productos en la Lista de Compras: <span id="totalProductos">{{ total_productos }}</span></p>
 
 {% endblock %}
+

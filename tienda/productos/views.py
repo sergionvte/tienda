@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import Producto
+from django.contrib import messages
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
+from collections import Counter
 
 # Create your views here.
 def index(request):
@@ -20,23 +22,36 @@ def registro(request):
     return render(request, 'registro.html')
 
 
+lista_compras = []
+
 def ventas(request):
+    global lista_compras
 
-    return render(request, 'ventas.html')
+    if request.method == 'POST':
+        codigo_barras = request.POST.get('codigo_barras')
+        producto = Producto.objects.get(codigo_barras=codigo_barras)
+        lista_compras.append(producto)
+
+    # Calcular el conteo de cada producto en la lista de compras
+    conteo_productos = dict(Counter(lista_compras))
+
+    total_productos = sum([producto.precio for producto in lista_compras])
+    context = {
+        'lista_compras': lista_compras,
+        'conteo_productos': conteo_productos,
+        'total_productos': total_productos,
+    }
+    return render(request, 'ventas.html', context)
 
 
+def eliminar_producto(request):
+    if request.method == 'POST':
+        codigo_barras = request.POST.get('codigo_barras')
+        producto = Producto.objects.get(codigo_barras=codigo_barras)
+        lista_compras.remove(producto)
+    return redirect('ventas')
 
 
 def informacion(request):
     return render(request, 'informacion.html')
 
-
-def lista_compras(request):
-    # Obtenemos la lista de compras de la sesión
-    lista_compras = request.session.get('lista_compras', [])
-
-    # Convertir cada producto en la lista de compras a un diccionario serializable
-    serialized_productos = [model_to_dict(producto) for producto in lista_compras]
-
-    # Pasar la lista de compras serializada al contexto del template
-    return render(request, 'tu_template.html', {'lista_compras': serialized_productos})
