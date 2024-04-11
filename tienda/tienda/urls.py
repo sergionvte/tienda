@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from productos.views import (
-    index, registro, eliminar_producto, registro, ventas
+    index, registro, registro, ventas, pago, eliminar_producto
 )
 
 urlpatterns = [
@@ -25,10 +25,11 @@ urlpatterns = [
     path('', index, name = 'index'),
     path('registro', registro, name='registro'),
     path('ventas', ventas, name='ventas'),
-    path('eliminar_producto/', eliminar_producto, name='eliminar_producto'),
+    path('pago/', pago, name='pago'),
+    path('eliminar/<str:codigo_barras>/', eliminar_producto, name='eliminar_producto'),
 
 ]
 
 admin.site.index_title = 'Tienda'
 admin.site.site_title = 'Nombre de la tienda'
-admin.site.site_header = 'Administrador de productos'
+admin.site.site_header = 'Administrador'

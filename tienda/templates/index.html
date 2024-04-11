@@ -13,8 +13,8 @@
 {% for producto in productos %}
     <li>
         <strong>{{ producto.nombre }}</strong>
-        <br>
-        Código de Barras: {{ producto.codigo_barras }}
+        {% comment %}<br>{% endcomment %}
+        {% comment %}Código de Barras: {{ producto.codigo_barras }}{% endcomment %}
         <br>
         Descripción: {{ producto.descripcion }}
         <br>

@@ -6,40 +6,44 @@
 {% endblock %}
 {% block content %}
 
-<h1>Lista de Compras</h1>
+{% comment %}<h1>Lista de Productos</h1>{% endcomment %}
+{% comment %}<ul>{% endcomment %}
+    {% comment %}{% for producto in productos %}{% endcomment %}
+        {% comment %}<li>{{ producto.nombre }} - {{ producto.descripcion }} - Precio: ${{ producto.precio }} - Stock Disponible: {{ producto.cantidad_disponible }}</li>{% endcomment %}
+    {% comment %}{% endfor %}{% endcomment %}
+{% comment %}</ul>{% endcomment %}
 
-<!-- Formulario para agregar productos -->
-<form id="agregarProductoForm" method="post">
+<h2>Agregar Producto al Carrito</h2>
+<form method="post">
     {% csrf_token %}
     <label for="codigo_barras">Código de Barras:</label>
-    <input type="text" id="codigo_barras" name="codigo_barras">
-    <button type="submit">Agregar Producto</button>
+    <input type="text" id="codigo_barras" name="codigo_barras" autofocus>
+    <button type="submit">Agregar al Carrito</button>
 </form>
 
-<hr>
-
-<!-- Lista de compras actual -->
-<h2>Productos en la Lista de Compras:</h2>
-<ul id="listaCompras">
-    {% for producto, cantidad in conteo_productos.items %}
-        <li>
-            {{ producto.nombre }} -
-            Cantidad: {{ cantidad }} -
-            Precio Individual: ${{ producto.precio }} -
-            <form action="{% url 'eliminar_producto' %}" method="post" style="display: inline;">
+<h2>Carrito de Compras</h2>
+<ul>
+    {% for item in carrito %}
+        <li class="article">
+            <h4>{{ item.producto.nombre }}</h4>
+            <p>Precio Unitario: ${{ item.producto.precio }}</p>
+            <p>Cantidad: {{ item.cantidad }} </p>
+            <form action="{% url 'eliminar_producto' item.producto.codigo_barras %}" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="codigo_barras" value="{{ producto.codigo_barras }}">
-                <button type="submit">Eliminar Unidad</button>
+                <button type="submit">Eliminar</button>
             </form>
         </li>
     {% empty %}
-        <li>No hay productos en la lista de compras.</li>
+        <li>No hay productos en el carrito.</li>
     {% endfor %}
 </ul>
 
+<p>Precio Total: ${{ precio_total }}</li>
 
-<!-- Mostrar el total de productos en la lista -->
-<p>Total de Productos en la Lista de Compras: <span id="totalProductos">{{ total_productos }}</span></p>
+<form action="{% url 'pago' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Pagar</button>
+</form>
 
 {% endblock %}
 
