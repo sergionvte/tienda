@@ -14,7 +14,8 @@
     </div>
     <div class="action">
       <ul>
-        {% block action %} {% endblock %}
+        {% block action %}{% endblock %}
+        <li><a href="{% url 'admin:index' %}">Admin</a></li>
       </ul>
     </div>
   </nav>

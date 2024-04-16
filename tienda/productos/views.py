@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from .models import Producto, CarritoCompra, Venta
 from django.contrib import messages
 from django.http import HttpResponse, FileResponse
 from django.db.models import Sum
 from django.utils import timezone
+import os
 
 # Create your views here.
 def index(request):
@@ -99,7 +100,6 @@ def pago(request):
             return response
 
     return redirect('ventas')
-
 
 
 def eliminar_producto(request, codigo_barras):

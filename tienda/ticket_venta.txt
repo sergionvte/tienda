@@ -1,7 +1,11 @@
 Ticket de compra:
 
-Producto: Cuaderno Norma
-Cantidad: 1
-Precio unitario: $15.00
+Producto: Fuze Tea
+Cantidad: 2
+Precio unitario: $25.00
 
-Total de la compra: $15.00
+Producto: Botella de agua
+Cantidad: 1
+Precio unitario: $200.00
+
+Total de la compra: $250.00

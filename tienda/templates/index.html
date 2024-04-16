@@ -2,11 +2,10 @@
 
 {% block action %}
 <li><a href="{% url 'ventas' %}">Cobrar</a></li>
-<li><a href="{% url 'admin:index' %}">Admin</a></li>
 {% endblock %}
 
 {% block content %}
-<h3>Total de Ventas Histórico: ${{ total_ventas_historico }}</h3>
+<h3>Total de Ventas: ${{ total_ventas_historico }}</h3>
 
 <ul>
 {% if productos %}
