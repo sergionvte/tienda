@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from productos.views import (
     index, registro, registro, ventas, pago, eliminar_producto
 )
@@ -27,8 +29,7 @@ urlpatterns = [
     path('ventas', ventas, name='ventas'),
     path('pago/', pago, name='pago'),
     path('eliminar/<str:codigo_barras>/', eliminar_producto, name='eliminar_producto'),
-
-]
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
 admin.site.index_title = 'Tienda'
 admin.site.site_title = 'Nombre de la tienda'

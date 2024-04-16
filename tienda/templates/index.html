@@ -1,20 +1,19 @@
 {% extends 'base.html' %}
 
 {% block action %}
-<li><a href="{% url 'admin:index' %}">Registro</a></li>
-<li><a href="{% url 'ventas' %}">Ventas</a></li>
+<li><a href="{% url 'ventas' %}">Cobrar</a></li>
+<li><a href="{% url 'admin:index' %}">Admin</a></li>
 {% endblock %}
 
-
 {% block content %}
+<h3>Total de Ventas Histórico: ${{ total_ventas_historico }}</h3>
+
 <ul>
-{% if productos is not None %}
+{% if productos %}
 <h3>Inventario</h3>
 {% for producto in productos %}
     <li>
         <strong>{{ producto.nombre }}</strong>
-        {% comment %}<br>{% endcomment %}
-        {% comment %}Código de Barras: {{ producto.codigo_barras }}{% endcomment %}
         <br>
         Descripción: {{ producto.descripcion }}
         <br>
@@ -22,6 +21,9 @@
         <br>
         Cantidad Disponible: {{ producto.cantidad_disponible }}
     </li>
+    {% if not forloop.last %}
+    <hr>
+    {% endif %}
 {% endfor %}
 {% endif %}
 </ul>

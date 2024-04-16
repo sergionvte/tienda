@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.conf import settings
+import os
 
 # Create your models here.
 class Producto(models.Model):
@@ -22,10 +24,21 @@ class Producto(models.Model):
         return self.nombre
 
 
-
 class CarritoCompra(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.cantidad} x {self.producto.nombre}"
+
+
+def get_upload_path(instance, filename):
+    return os.path.join('tickets', 'venta_{instance.fecha.strftime("%d-%m-%Y")}.txt')
+
+
+class Venta(models.Model):
+    fecha_hora = models.DateTimeField(auto_now_add=True)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"Venta {self.id} - {self.fecha_hora}"

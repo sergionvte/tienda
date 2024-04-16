@@ -1,0 +1,7 @@
+Ticket de compra:
+
+Producto: Cuaderno Norma
+Cantidad: 1
+Precio unitario: $15.00
+
+Total de la compra: $15.00

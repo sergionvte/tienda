@@ -1,15 +1,20 @@
 from django.shortcuts import render, redirect
-from .models import Producto, CarritoCompra
+from .models import Producto, CarritoCompra, Venta
 from django.contrib import messages
-from django.http import JsonResponse
-from django.forms.models import model_to_dict
-from collections import Counter
+from django.http import HttpResponse, FileResponse
+from django.db.models import Sum
+from django.utils import timezone
 
 # Create your views here.
 def index(request):
     productos = Producto.objects.all()
+
+    # Calcular el total de ventas históricas
+    total_ventas_historico = Venta.objects.aggregate(total=Sum('total'))['total'] or 0
+
     context = {
         'productos': productos,
+        'total_ventas_historico': total_ventas_historico,
     }
     return render(
         request,
@@ -20,6 +25,7 @@ def index(request):
 
 def registro(request):
     return render(request, 'registro.html')
+
 
 def ventas(request):
     if request.method == 'POST':
@@ -57,6 +63,10 @@ def pago(request):
     if request.method == 'POST':
         carrito = CarritoCompra.objects.all()
 
+        # Calcular el total de la venta actual
+        total_venta = sum(item.producto.precio * item.cantidad for item in carrito)
+
+        # Procesar el pago y actualizar el stock
         for item in carrito:
             if item.producto.cantidad_disponible >= item.cantidad:
                 item.producto.cantidad_disponible -= item.cantidad
@@ -65,9 +75,31 @@ def pago(request):
             else:
                 messages.error(request, f"No hay suficiente stock para {item.producto.nombre}.")
 
+        # Crear una instancia de Venta y guardarla en la base de datos
+        nueva_venta = Venta.objects.create(total=total_venta)
+        nueva_venta.save()
+
         messages.success(request, "Pago procesado correctamente.")
 
+        # Generar el contenido del ticket
+        ticket_content = "Ticket de compra:\n\n"
+        for item in carrito:
+            ticket_content += f"Producto: {item.producto.nombre}\nCantidad: {item.cantidad}\nPrecio unitario: ${item.producto.precio}\n\n"
+        ticket_content += f"Total de la compra: ${total_venta}\n"
+
+        # Guardar el contenido del ticket en un archivo de texto
+        filename = "ticket_venta.txt"
+        with open(filename, 'w') as ticket_file:
+            ticket_file.write(ticket_content)
+
+        # Devolver el archivo de texto como una respuesta HTTP para que se descargue en el navegador
+        with open(filename, 'rb') as file:
+            response = HttpResponse(file.read(), content_type='text/plain')
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
+            return response
+
     return redirect('ventas')
+
 
 
 def eliminar_producto(request, codigo_barras):
